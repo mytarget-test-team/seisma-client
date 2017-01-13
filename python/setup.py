@@ -4,7 +4,7 @@ from setuptools import setup
 from setuptools import find_packages
 
 
-__version__ = '0.0.1'
+__version__ = '0.0.2'
 
 
 def install_package():
@@ -12,7 +12,7 @@ def install_package():
         name='seisma',
         version=__version__,
         url='https://github.com/trifonovmixail/seisma-client',
-        packages=find_packages(exclude=('tests*')),
+        packages=find_packages(exclude=('tests*',)),
         author='Mikhail Trifonov',
         author_email='trifonovmixail@ya.ru',
         license='GNU LGPL',
@@ -23,7 +23,6 @@ def install_package():
         zip_safe=False,
         platforms='any',
         install_requires=['requests>=2.5'],
-        test_suite='tests',
         classifiers=(
             'Development Status :: 3 - Alpha',
             'Natural Language :: Russian',
