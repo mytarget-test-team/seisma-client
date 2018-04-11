@@ -33,7 +33,23 @@ def will_expected(status_code):
     def wrapper(f):
         @wraps(f)
         def wrapped(*args, **kwargs):
-            resp = f(*args, **kwargs)
+            try:
+                resp = f(*args, **kwargs)
+            except BaseException as error:
+                warn(
+                    '{}'.format(
+                        error.__class__.__name__,
+                        getattr(
+                            error, 'message',
+                            u' '.join(
+                                i for i in getattr(error, 'args', []) if not isinstance(i, int)
+                            )
+                        ),
+                    ),
+                    RemoteApiError,
+                )
+                return None
+
             if resp is not None and resp.status_code != status_code:
                 message = u'Aggregate analytic error. From URL {} got response {}'.format(
                     resp.url, resp.content,
@@ -48,8 +64,24 @@ def true_by_status(success_status_code):
     def wrapper(f):
         @wraps(f)
         def wrapped(*args, **kwargs):
-            resp = f(*args, **kwargs)
-            if resp.status_code  == success_status_code:
+            try:
+                resp = f(*args, **kwargs)
+            except BaseException as error:
+                warn(
+                    '{}'.format(
+                        error.__class__.__name__,
+                        getattr(
+                            error, 'message',
+                            u' '.join(
+                                i for i in getattr(error, 'args', []) if not isinstance(i, int)
+                            )
+                        ),
+                    ),
+                    RemoteApiError,
+                )
+                return False
+
+            if resp.status_code == success_status_code:
                 return True
             return False
         return wrapped
