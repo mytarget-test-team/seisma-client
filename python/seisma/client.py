@@ -42,7 +42,7 @@ def will_expected(status_code):
                         getattr(
                             error, 'message',
                             u' '.join(
-                                i for i in getattr(error, 'args', []) if not isinstance(i, int)
+                                str(i) for i in getattr(error, 'args', []) if not isinstance(i, int)
                             )
                         ),
                     ),
@@ -73,7 +73,7 @@ def true_by_status(success_status_code):
                         getattr(
                             error, 'message',
                             u' '.join(
-                                i for i in getattr(error, 'args', []) if not isinstance(i, int)
+                                str(i) for i in getattr(error, 'args', []) if not isinstance(i, int)
                             )
                         ),
                     ),
