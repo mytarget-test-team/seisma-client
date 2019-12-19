@@ -211,6 +211,22 @@ class Seisma(Session):
 
         return self.post(url, json=json)
 
+
+    @will_expected(200)
+    def update_case_in_job(self, name, description):
+        url = '{}{}'.format(
+            self.api_url,
+            '/jobs/{}/cases/{}'.format(
+                self.job_name, quote(name),
+            ),
+        )
+        json = {
+            'description': description,
+        }
+
+        return self.put(url, json=json)
+
+
     @will_expected(201)
     def add_case_result(self, name, status, runtime, reason=None, metadata=None):
         url = '{}{}'.format(
