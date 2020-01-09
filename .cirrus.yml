@@ -1,0 +1,24 @@
+container:
+  image: python:3.7
+
+pep8_task:
+  timeout_in: 5m
+  script:
+    - cd python
+    - pip install -r test.requirements.txt -U
+    - flake8 --config ./flake8.ini
+
+do_release_task:
+  timeout_in: 5m
+  only_if: $CIRRUS_TAG != ''
+  environment:
+    PYPI_USER: ENCRYPTED[!0d8c9a55e2946e20db9ad26663ac8a2c0c674b30d5cbf4c81bfd79730b4f3cb3a477165729ec5a1e529d84f1cd6c24b3!]
+    PYPI_PASSWORD: ENCRYPTED[!a9b03618da25661c32e33944834c52d8a13dc99f42779cb6bd0dd2ceb05d7cfec7b605313836fb507eb46859208bd073!]
+  depends_on:
+    - pep8
+  script:
+    - cd python
+    - pip install twine
+    - ./genpypirc
+    - python setup.py sdist
+    - twine upload dist/*
