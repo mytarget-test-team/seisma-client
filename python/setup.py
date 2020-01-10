@@ -4,13 +4,11 @@ from setuptools import setup
 from setuptools import find_packages
 
 
-__version__ = '0.0.3'
-
-
 def install_package():
     setup(
         name='seisma',
-        version=__version__,
+        version_format='{tag}',
+        setup_requires=['setuptools-git-version'],
         url='https://github.com/trifonovmixail/seisma-client',
         packages=find_packages(exclude=('tests*',)),
         author='Mikhail Trifonov',
