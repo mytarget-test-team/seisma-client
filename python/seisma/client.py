@@ -13,7 +13,6 @@ try:
 except ImportError:
     from urllib.parse import quote
 
-
 DIALECT = 'python'
 
 DEFAULT_API_VERSION = 1
@@ -56,7 +55,9 @@ def will_expected(status_code):
                 )
                 warn(message, RemoteApiError)
             return resp
+
         return wrapped
+
     return wrapper
 
 
@@ -84,7 +85,9 @@ def true_by_status(success_status_code):
             if resp.status_code == success_status_code:
                 return True
             return False
+
         return wrapped
+
     return wrapper
 
 
@@ -210,6 +213,20 @@ class Seisma(Session):
             json['description'] = description
 
         return self.post(url, json=json)
+
+    @will_expected(200)
+    def update_case_in_job(self, name, description):
+        url = '{}{}'.format(
+            self.api_url,
+            '/jobs/{}/cases/{}'.format(
+                self.job_name, quote(name),
+            ),
+        )
+        json = {
+            'description': description,
+        }
+
+        return self.put(url, json=json)
 
     @will_expected(201)
     def add_case_result(self, name, status, runtime, reason=None, metadata=None):
