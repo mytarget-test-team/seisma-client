@@ -23,6 +23,8 @@ DEFAULT_BUILD_TITLE = 'Launch at {}'.format(
 
 DEFAULT_BUILD_NAME = str(hash(str(uuid.uuid4()) + str(time.time())))
 
+DEFAULT_CONNECTION_TIMEOUT = 3
+
 
 class RemoteApiError(UserWarning):
     pass
@@ -101,7 +103,8 @@ class Seisma(Session):
                  build_name=None,
                  api_version=None,
                  build_metadata=None,
-                 build_name_preffix=None):
+                 build_name_preffix=None,
+                 connection_timeout=None):
         self.base_url = base_url
         self.api_version = api_version or DEFAULT_API_VERSION
 
@@ -121,6 +124,13 @@ class Seisma(Session):
         super(Seisma, self).__init__()
 
         self.headers['Content-Type'] = 'application/json'
+
+        self.connection_timeout = connection_timeout
+
+    def request(self, *args, **kwargs):
+        kwargs.setdefault('timeout', self.connection_timeout or DEFAULT_CONNECTION_TIMEOUT)
+
+        return super(Seisma, self).request(*args, **kwargs)
 
     @will_expected(201)
     def create_job(self, description=None):
