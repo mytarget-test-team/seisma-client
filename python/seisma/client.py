@@ -49,6 +49,16 @@ def will_expected(status_code):
                     ),
                     RemoteApiError,
                 )
+                args_string = ''.join([('%s; ' % x) for x in args])
+                warn(
+                    args_string,
+                    RemoteApiError,
+                )
+                kwargs_string = ''.join([('%s=%s; ' % x) for x in kwargs.iteritems()])
+                warn(
+                    kwargs_string,
+                    RemoteApiError,
+                )
                 return None
 
             if resp is not None and resp.status_code != status_code:
