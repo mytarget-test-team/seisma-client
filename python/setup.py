@@ -8,7 +8,7 @@ def install_package():
     setup(
         name='seisma',
         version_format='{tag}',
-        setup_requires=['setuptools-git-version'],
+        setup_requires=['setuptools-git-version', 'wheel'],
         url='https://github.com/trifonovmixail/seisma-client',
         packages=find_packages(exclude=('tests*',)),
         author='Mikhail Trifonov',
